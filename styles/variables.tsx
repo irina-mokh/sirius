@@ -16,7 +16,7 @@ export const colors: {
   'blue': {
     default:'#104987',
     hover: '#08386E',
-    active: '#042A54',
+    active: '#242546',
   },
   'green': {
     default:'#38DF7A',
@@ -51,10 +51,10 @@ export const amounts = [
   }
 ]
 
-export const values = [
+export const intervals = [
   {
     label: 'A',
-    value: '[ЁёА-я]',
+    value: '[А-Я]',
   }, {
     label: '9',
     value: '[1,9]',
@@ -63,13 +63,13 @@ export const values = [
     value: '[10,19]',
   },{
     label: '50',
-    value: '[20, 50]',
+    value: '[20,50]',
   },{
     label: '99',
-    value: '[51, 99]',
+    value: '[51,99]',
   },{
     label: '999',
-    value: '[100, 999]',
+    value: '[100,999]',
   }
 ]
 

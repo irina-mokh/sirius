@@ -1,7 +1,8 @@
 import { FilterPosition } from '../styles/variables';
 import styled from '@emotion/styled';
 import React from 'react';
-import { amounts, colors, values } from '../styles/variables';
+import { colors } from '../styles/variables';
+import { useFormContext } from 'react-hook-form';
 
 type RangeInputProps = {
 	data: FilterPosition[];
@@ -10,7 +11,7 @@ type RangeInputProps = {
 
 const RangeBar = styled.div`
 	width: 100%;
-	margin: 20px;
+	margin: 20px auto;
 	
 	.range {
 		-webkit-appearance: none;
@@ -48,6 +49,7 @@ const RangeBar = styled.div`
 		justify-content: space-between;
 		writing-mode: vertical-lr;
 		width: 90%;
+		margin: 0 auto;
 	}
 	
 	.option {
@@ -58,22 +60,23 @@ const RangeBar = styled.div`
 		font-size: 24px;
 		line-height: 29px;
 		text-align: center;
+		@media (max-width: 980px) {
+    	font-size: 20px;
+  	}
 	}
 
 `
 
 export const RangeInput = ({data, name}: RangeInputProps) => {
+	const { register } = useFormContext();
+
 	const options = data.map(radio => (
 		<option value={radio.value} label={radio.label} key={radio.value} className='option' />
 	))
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const index = Number(e.target.value);
-		console.log(data[index].value)
-	}
 	return (
 			<RangeBar>
-			<input type="range" list={name} defaultValue={0} className="range" min={0} max={data.length - 1} onChange={handleChange}></input>
+			<input type="range" list={name} defaultValue={0} className="range" min={0} max={data.length - 1}  {...register(name)}></input>
 			<datalist id={name} className="datalist">
 				{options}
 			</datalist>

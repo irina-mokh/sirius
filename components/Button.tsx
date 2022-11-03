@@ -6,6 +6,7 @@ import { colors } from '../styles/variables';
 type ButtonProps = {
 	children: React.ReactNode,
 	bg: Shades,
+  type: "button" | "submit" | "reset";
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -20,7 +21,7 @@ const StyledButton = styled.button<ButtonProps>`
   line-height: 44px;
   border: none;
   transition: color 0.2s ease;
-  color: ${colors.black.default};
+  color: ${colors.white.default};
   border-radius: 20px;
   font-family: 'Helvetica';
   font-weight: 400;
@@ -35,5 +36,5 @@ const StyledButton = styled.button<ButtonProps>`
   }
 `;
 
-export const Button = (props: ButtonProps) => <StyledButton bg={props.bg}>{props.children}</StyledButton>
+export const Button = (props: ButtonProps) => <StyledButton bg={props.bg} type={props.type}>{props.children}</StyledButton>
 

@@ -27,7 +27,7 @@ export default function Home() {
       <Main>
         <h1 className='title'>Тренажер "Порядок"</h1>
         <Link href="/order-settings">
-          <Button bg={colors.green}>Играть</Button>
+          <Button bg={colors.green} type='button'>Играть</Button>
         </Link>
       </Main>
     </div>

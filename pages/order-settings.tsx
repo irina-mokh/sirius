@@ -1,11 +1,18 @@
 import Link from 'next/link';
 import styled from '@emotion/styled';
-import { amounts, colors, values } from '../styles/variables';
+import { amounts, colors, intervals } from '../styles/variables';
 import { RangeInput } from '../components/RangeInput';
 import { Button } from '../components/Button';
 import bgSrc from '../assets/images/bg-settings.png';
-import React from 'react';
+import React, { useRef } from 'react';
+import Router from 'next/router';
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 
+type Inputs = {
+  amount: number;
+  interval: string;
+  sort: string;
+}
 const Wrapper = styled.div`
   height: 100vh;
   display: flex;
@@ -19,10 +26,9 @@ const Wrapper = styled.div`
 
 const Menu = styled.div`
   padding: 20px;
-  min-width: 400px;
-  @media (min-width: 768px) {
-    width: 699px;
-    min-width: 600px;
+  width: 699px;
+  @media (max-width: 980px) {
+    min-width: 400px;
   }
   height: 90%;
   background: linear-gradient( #7F75F0, #101F32);
@@ -38,6 +44,9 @@ const Form = styled.form`
   background: ${colors.white.default};
   border-radius: 20px;
   text-align: center;
+  @media (max-width: 980px) {
+    padding: 10px;
+  }
   
 `;
 
@@ -46,12 +55,18 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 32px;
   margin: 0 0 16px 0;
+  @media (max-width: 980px) {
+    font-size: 26px;
+  }
 `
 
 const Sort = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
+  @media (max-width: 980px) {
+    margin: 8px 0;
+  }
 `
 
 const SortBtn = styled.div`
@@ -65,7 +80,7 @@ const SortBtn = styled.div`
     font-weight: 700;
     font-size: 32px;
     opacity: 0.56;
-    @media (max-width: 650px) {
+    @media (max-width: 980px) {
       font-size: 24px;
     }
   }
@@ -80,35 +95,42 @@ const SortBtn = styled.div`
 `;
 
 export default function OrderSettings() {
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    console.log(e.target);
+  const onSubmit: SubmitHandler<Inputs> = (e) => {
+    console.log(e);
+ 
+    localStorage.setItem('sets', JSON.stringify(e));
+    Router.push('order');
   }
+
+  const methods = useForm<Inputs>()
+  const { register, handleSubmit } = methods;
+
   return (
     <Wrapper>
       <Menu>
-        <Form onSubmit={handleSubmit}>
-          <div>
-            <Label>Кол-во предметов</Label>
-            <RangeInput data={amounts} name="amount" />
-          </div>
-          <div>
-            <Label>Значения</Label>
-            <RangeInput data={values} name="value" />
-          </div>
-          <Sort>
-            <SortBtn>
-              <input type="radio" value='ascending' id="ascending" name="sort" checked />
-              <label htmlFor='ascending' className="label">По возрастанию</label>
-            </SortBtn>
-            <SortBtn>            
-              <input type="radio" id="descending" name="sort" value="descending" />
-              <label className="label" htmlFor='descending'>По убыванию</label>
-            </SortBtn>
-          </Sort>
-          <Link href="/order">
-            <Button bg={colors.green}>Играть</Button>
-          </Link>
-        </Form>
+        <FormProvider {...methods}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <Label>Кол-во предметов</Label>
+              <RangeInput data={amounts} name="amountIndex" />
+            </div>
+            <div>
+              <Label>Значения</Label>
+              <RangeInput data={intervals} name="intervalsIndex" />
+            </div>
+            <Sort>
+              <SortBtn>
+                <input type="radio" value='ascending' id="ascending" {...register("sort")} defaultChecked />
+                <label htmlFor='ascending' className="label">По возрастанию</label>
+              </SortBtn>
+              <SortBtn>            
+                <input type="radio" id="descending" {...register("sort")} value="descending" />
+                <label className="label" htmlFor='descending'>По убыванию</label>
+              </SortBtn>
+            </Sort>
+              <Button type="submit" bg={colors.green}>Играть</Button>
+          </Form>
+        </FormProvider>
       </Menu>
     </Wrapper>
   )
