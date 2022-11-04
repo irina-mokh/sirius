@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { colors } from '../styles/variables';
+import { useDrag } from 'react-dnd';
 
-type ItemProps = {
+export type ItemProps = {
 	theme: number;
 	value: string;
 	i: number;
@@ -10,15 +11,19 @@ type ItemProps = {
 }
 
 const StyledItem = styled.div<ItemProps>`
-	width: ${props => props.size + 25}px;
-	height: ${props => props.size + 26}px;
+	width: ${props => props.size}px;
+	height: ${props => props.size}px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-image: url(${({theme, i})=> `/images/item${theme}-${i}.svg`});
 	background-size: contain;
 	background-repeat: no-repeat;
+	background-clip: padding-box;
 	position: relative;
+	transform: translate(0, 0);
+	cursor: grab;
+	z-index: 2;
 	.text {
 		font-family: Calibri;
 		font-weight: 800;
@@ -50,8 +55,18 @@ const StyledItem = styled.div<ItemProps>`
 	}
 `
 export const Item = (props: ItemProps) => {
+	const [{ opacity }, dragRef] = useDrag(
+    () => ({
+      type: 'item',
+      item: props,
+      collect: (monitor) => ({
+        opacity: monitor.isDragging() ? 0 : 1
+      })
+    }),
+    []
+  )
 	return (
-		<StyledItem {...props}>
+		<StyledItem {...props} ref={dragRef} style={{opacity}}>
 			<span className="text">{props.value}</span>
 		</StyledItem>
 	);

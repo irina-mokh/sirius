@@ -94,16 +94,17 @@ const SortBtn = styled.div`
   
 `;
 
-export default function OrderSettings() {
+export default function Settings() {
+  let data;
   const onSubmit: SubmitHandler<Inputs> = (e) => {
     console.log(e);
- 
-    localStorage.setItem('sets', JSON.stringify(e));
-    Router.push('order');
+    data = e;
+    // localStorage.setItem('sets', JSON.stringify(e));
+    // Router.push('order');
   }
 
   const methods = useForm<Inputs>()
-  const { register, handleSubmit } = methods;
+  const { register, handleSubmit, watch } = methods;
 
   return (
     <Wrapper>
@@ -128,7 +129,12 @@ export default function OrderSettings() {
                 <label className="label" htmlFor='descending'>По убыванию</label>
               </SortBtn>
             </Sort>
+            <Link href={{
+              pathname: '/game',
+              query: {...watch()},
+            }}>
               <Button type="submit" bg={colors.green}>Играть</Button>
+            </Link>
           </Form>
         </FormProvider>
       </Menu>
