@@ -8,11 +8,20 @@ export type ItemProps = {
 	i: number;
 	n: number;
 	size: number;
+	show: boolean;
 }
 
-const StyledItem = styled.div<ItemProps>`
-	width: ${props => props.size}px;
-	height: ${props => props.size}px;
+type ItemStyledProps = {
+	transparency: string;
+	size: number;
+	i: number;
+	n: number;
+}
+export const ItemStyled = styled.div<ItemStyledProps>`
+	opacity: ${({transparency}) => transparency};
+	width: ${props => props.size + 25}px;
+	aspect-ratio: 1 / 1;
+	/* height: ${props => props.size + 25}px; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -34,10 +43,6 @@ const StyledItem = styled.div<ItemProps>`
 		-webkit-text-stroke: 4px ${colors.blue.active};
 	}
 
-	&:nth-of-type(3) {
-		margin: 0 -20px;
-	}
-
 	&:nth-of-type(1) {
 		bottom: 0;
 	}
@@ -46,6 +51,7 @@ const StyledItem = styled.div<ItemProps>`
 	}
 	&:nth-of-type(3) {
 		bottom: ${({n}) => n == 5 ? '-10%' : '0'};
+		margin: 0 -20px;
 	}
 	&:nth-of-type(4) {
 		top: ${({n}) => n > 3 ? '-15%' : '0'};
@@ -55,19 +61,23 @@ const StyledItem = styled.div<ItemProps>`
 	}
 `
 export const Item = (props: ItemProps) => {
-	const [{ opacity }, dragRef] = useDrag(
+	const { i, show, value} = props;
+	const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: 'item',
       item: props,
       collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0 : 1
+        isDragging: monitor.isDragging(),
       })
     }),
     []
   )
+
+	const transparency = (isDragging || !show) ? '0' : '1';
+
 	return (
-		<StyledItem {...props} ref={dragRef} style={{opacity}}>
-			<span className="text">{props.value}</span>
-		</StyledItem>
+		<ItemStyled {...props} ref={dragRef} transparency={transparency}>
+			<span className="text">{value}</span>
+		</ItemStyled>
 	);
 }

@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { ReactFragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { amounts, intervals } from '../styles/variables';
-import { Item, ItemProps } from '../components/Item';
+import { Item, ItemProps, ItemStyled } from '../components/Item';
 import { getRandom, getRandomSymbol } from '../utils';
 import { colors } from '../styles/variables';
-import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { GetServerSidePropsContext } from 'next';
+import { Slot } from '../components/Slot';
 
 const GameStyled = styled.main`
   display: flex;
@@ -43,16 +43,6 @@ const SlotBar = styled.ul`
     opacity: ${({theme}) => theme == 1 ? '0.1' : '1'};
   }
   
-`
-const Slot = styled.li<SlotProps>`
-  list-style: none;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  margin: 0 4px 0 0;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.06);
-  box-shadow: inset 0px 4px 25px rgba(0, 0, 0, 0.25);
-  z-index: 2;
 `
 const Items = styled.ul`
   display: flex;
@@ -93,75 +83,111 @@ type GameProps = {
   sort: string;
   correct: Array<number | string>;
 }
-
-type SlotProps = {
-  n: number;
-  size: number;
-}
-
 type SortProps = {
   sort: string;
 }
 
+function getSize() {
+  if (window) {
+    return Math.min(131, window.innerWidth / 7);
+  } else {
+    return 131;
+  }
+}
+
 export default function Game(props: GameProps) {
   // change items size on screen resize
-  const [size, setSize ] = useState(131);
+  const [size, setSize ] = useState(115);
   useEffect(() => {
-    function updateSize() {
-      const {innerWidth, innerHeight} = window;
-      const newSize =  innerWidth / 7;
-      setSize(Math.min(131, newSize));
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
+    
+    window.addEventListener('resize', () => setSize(getSize()));
+    return () => window.removeEventListener('resize', () => setSize(getSize()));
   },[]);
 
   const {values, theme, sort, correct} = props;
   const amount = values.length;
 
-  // generate correct res
-  const [res, setRes] = useState(Array(amount));
+  // generate items show-state to change after DnD
+  const INITIAL_SHOW_ARR = Array(amount).fill(true);
+  const [itemsShow, setItemsShow] = useState(INITIAL_SHOW_ARR);
 
+  // generate correct res state
+  const [res, setRes] = useState(Array(amount + 1));
+
+  console.log('correct in component', correct);
   if (sort == 'ascending') {
     res[0] = correct[0];
   } else {
     res[amount] = correct[amount];
   }
-  console.log('correct order', correct);
-
-  // render items
-  const items = values.map((value, i) => (
-    <Item key={i} theme={theme} value={String(value)} n={amount} i={i+1} size={size}></Item>
-  ))
   
-  // generate slots
-  const slots: JSX.Element[] = [];
-  // drop to slots
-  const [{ canDrop, isOver }, drop] = useDrop(
-    () => ({
-      accept: 'item',
-      drop: async (drag: ItemProps) => {
-        //TODO check
-        // setRes
-        console.log('drop');
-      },
-      collect: (monitor: DropTargetMonitor) => ({
-        isOver: !!monitor.isOver(),
-        canDrop: !!monitor.canDrop(),
-      }),
-    }),
-    [props]
-  );
+  // render items
+  const [items, setItems] = useState<JSX.Element[]>([]);
+
+  useEffect(() => {
+    const elements = values.map((value, i) => (
+      <Item key={i} theme={theme} value={String(value)} n={amount} i={i+1} size={size} show={itemsShow[i]}></Item>))
+    setItems(elements)
+  }, [itemsShow]);
+
+  // prepare sounds 
+  const  [audioErr, setAudioErr ] = useState<HTMLAudioElement | null>(null);
+  const  [audioWin, setAudioWin ] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setAudioErr(new Audio('./audio/err.mp3'));
+    setAudioWin(new Audio('./audio/success.mp3'))
+  }, [])
+  
+
+  // check for all correct answers
+  useEffect(() => {
+    if (JSON.stringify(res) == JSON.stringify(correct)) {
+      console.log('WIN!!!!');
+      audioWin?.play();
+    }
+  }, [res])
 
   // render slots
+  const slots: JSX.Element[] = [];
   for (let i = 0; i <= amount; i++){
+    // state to get i for BG image from unsorted values
+    const [ dropI, setDropI] = useState(6);
     slots.push(
-      <Slot key={i} theme={theme} n={amount + 1} size={size} ref={drop}>
+      <Slot key={i} n={amount + 1} size={size} dropHandle={(item : ItemProps) => {
+        if (correct[i] == item.value) {
+          // update i for the same bg-image
+          setDropI(item.i);
+
+          const newRes = [...res];
+          newRes[i] = item.value;
+
+          // update slot bar results
+          setRes(newRes);
+
+          // hide item from the list
+          const showArr = [...itemsShow];
+          showArr[item.i - 1] = false;
+          setItemsShow(showArr);
+        } else {
+          audioErr?.play();
+        }
+      }}>
         {res[i] &&
-        <Item key={i} theme={theme} n={amount} i={i + 1} size={size} value={String(res[i])}></Item>}
-      </Slot>)
+        <Item
+          key={i}
+          theme={theme}
+          n={amount}
+          i={dropI}
+          size={size}
+          value={String(res[i])}
+          show={true}
+        ></Item>
+        }
+      </Slot>
+    )
   } 
+
   return (
     <GameStyled theme={props.theme}>
       <Items>
@@ -220,6 +246,7 @@ export const getServerSideProps = (context : GetServerSidePropsContext) => {
   const correct = [...values].sort();
   const start = sort == 'ascending' ? correct[0] : correct[correct.length - 1];
   values.splice(values.findIndex((i) => i == start), 1);
+
   return {
     props: {theme, values, sort, correct}
   }

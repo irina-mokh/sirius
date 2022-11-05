@@ -13,6 +13,7 @@ type Inputs = {
   interval: string;
   sort: string;
 }
+
 const Wrapper = styled.div`
   height: 100vh;
   display: flex;
@@ -99,8 +100,6 @@ export default function Settings() {
   const onSubmit: SubmitHandler<Inputs> = (e) => {
     console.log(e);
     data = e;
-    // localStorage.setItem('sets', JSON.stringify(e));
-    // Router.push('order');
   }
 
   const methods = useForm<Inputs>()
