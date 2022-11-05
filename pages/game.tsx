@@ -6,6 +6,7 @@ import { getRandom, getRandomSymbol } from '../utils';
 import { colors } from '../styles/variables';
 import { GetServerSidePropsContext } from 'next';
 import { Slot } from '../components/Slot';
+import { Win } from '../components/Win';
 
 const GameStyled = styled.main`
   display: flex;
@@ -114,7 +115,6 @@ export default function Game(props: GameProps) {
   // generate correct res state
   const [res, setRes] = useState(Array(amount + 1));
 
-  console.log('correct in component', correct);
   if (sort == 'ascending') {
     res[0] = correct[0];
   } else {
@@ -140,11 +140,13 @@ export default function Game(props: GameProps) {
   }, [])
   
 
+  // success modal
+  const [showModal, setShowModal] = useState(false);
   // check for all correct answers
   useEffect(() => {
     if (JSON.stringify(res) == JSON.stringify(correct)) {
-      console.log('WIN!!!!');
       audioWin?.play();
+      setShowModal(true);
     }
   }, [res])
 
@@ -199,6 +201,7 @@ export default function Game(props: GameProps) {
       <SlotBar theme={props.theme}>
         {slots}
       </SlotBar>
+      <Win show={showModal}></Win>
     </GameStyled>
   )
 };

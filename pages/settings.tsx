@@ -5,7 +5,6 @@ import { RangeInput } from '../components/RangeInput';
 import { Button } from '../components/Button';
 import bgSrc from '../assets/images/bg-settings.png';
 import React, { useRef } from 'react';
-import Router from 'next/router';
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 
 type Inputs = {
