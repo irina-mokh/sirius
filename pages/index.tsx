@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Button } from '../components/Button';
 import { colors } from '../styles/variables';
 import Link from 'next/link';
+import bgSrc from '../assets/images/bg-settings.png';
 
 const Main = styled.main`
   height: 100vh;
@@ -10,9 +11,12 @@ const Main = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  background-image: url(${bgSrc.src});
   .title {
     margin: 0 0 10px 0;
+    font-size: 40px;
+    color: #ffffff;
+    margin: 0 0 40px 0;
   }
 `
 
