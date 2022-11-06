@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { colors } from '../styles/variables';
 import { useDrag } from 'react-dnd';
+import { useEffect, useState } from 'react';
 
 export type ItemProps = {
 	theme: number;
@@ -80,6 +81,12 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 `
 export const Item = (props: ItemProps) => {
 	const { i, show, value} = props;
+
+	const  [audioGrab, setAudioGrab ] = useState<HTMLAudioElement | null>(null);
+	useEffect(() => {
+		setAudioGrab(new Audio('./audio/grab.mp3'));
+	}, []);
+	
 	const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: 'item',
@@ -94,7 +101,7 @@ export const Item = (props: ItemProps) => {
 	const transparency = (isDragging || !show) ? '0' : '1';
 
 	return (
-		<ItemStyled {...props} ref={dragRef} transparency={transparency}>
+		<ItemStyled {...props} ref={dragRef} transparency={transparency} onMouseDown={() =>{audioGrab?.play()}} onTouchStart={() =>{audioGrab?.play()}}>
 			<span className="text">{value}</span>
 		</ItemStyled>
 	);

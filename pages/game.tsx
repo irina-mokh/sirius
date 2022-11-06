@@ -43,11 +43,13 @@ export default function Game(props: GameProps) {
   const  [audioErr, setAudioErr ] = useState<HTMLAudioElement | null>(null);
   const  [audioWin, setAudioWin ] = useState<HTMLAudioElement | null>(null);
   const  [audioBg, setAudioBg ] = useState<HTMLAudioElement | null>(null);
+  const  [audioDrop, setAudioDrop ] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setAudioErr(new Audio('./audio/err.mp3'));
     setAudioWin(new Audio('./audio/success.mp3'));
     setAudioBg(new Audio('./audio/music.mp3'));
+    setAudioDrop(new Audio('./audio/drop.mp3'));
   }, []);
 
   audioBg?.addEventListener('ended', function () {
@@ -116,7 +118,7 @@ export default function Game(props: GameProps) {
         if (correct[i] == item.value) {
           // update i for the same bg-image
           setDropI(item.i);
-
+          audioDrop?.play();
           const newRes = [...res];
           newRes[i] = item.value;
 
