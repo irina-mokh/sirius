@@ -38,6 +38,8 @@ const Popup = styled.div`
 	@media (max-width: 980px) {
 		width: 80%;
 		height: 80%;
+		padding: 10px;
+		border-radius: 40px;
 	}
 	// stars left
 	&::before, &::after {
@@ -98,6 +100,9 @@ const Popup = styled.div`
 	button {
 		font-family: inherit;
 		font-size: 40px;
+		@media (max-width: 800px) {
+			font-size: 24px;
+		}
 	}
 
 	.title {
@@ -112,7 +117,7 @@ const Popup = styled.div`
 		drop-shadow(0 0  5px #1E813A);
 		font-size: 128px;
 		@media (max-width: 800px) {
-			font-size: 80px;
+			font-size: 60px;
 		}
 	}
 
@@ -125,7 +130,7 @@ const Popup = styled.div`
 		flex-grow: 1;
 		margin-top: 22px;
 		@media (max-width: 800px) {
-			font-size: 36px;
+			font-size: 32px;
 		}
 	}
 `
