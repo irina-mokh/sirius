@@ -39,12 +39,29 @@ function getSize() {
 }
 
 export default function Game(props: GameProps) {
+  // prepare sounds 
+  const  [audioErr, setAudioErr ] = useState<HTMLAudioElement | null>(null);
+  const  [audioWin, setAudioWin ] = useState<HTMLAudioElement | null>(null);
+  const  [audioBg, setAudioBg ] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setAudioErr(new Audio('./audio/err.mp3'));
+    setAudioWin(new Audio('./audio/success.mp3'));
+    setAudioBg(new Audio('./audio/music.mp3'));
+  }, []);
+
+  useEffect(() => {
+    audioBg?.play();
+    return () => { audioBg?.pause()}
+  },[audioBg]);
   // change items size on screen resize
   const [size, setSize ] = useState(115);
   useEffect(() => {
     
     window.addEventListener('resize', () => setSize(getSize()));
     return () => window.removeEventListener('resize', () => setSize(getSize()));
+
+
   },[]);
 
   const {values, theme, sort, correct} = props;
@@ -72,21 +89,13 @@ export default function Game(props: GameProps) {
     setItems(elements)
   }, [itemsShow]);
 
-  // prepare sounds 
-  const  [audioErr, setAudioErr ] = useState<HTMLAudioElement | null>(null);
-  const  [audioWin, setAudioWin ] = useState<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    setAudioErr(new Audio('./audio/err.mp3'));
-    setAudioWin(new Audio('./audio/success.mp3'))
-  }, [])
-  
 
   // success modal
   const [showModal, setShowModal] = useState(false);
   // check for all correct answers
   useEffect(() => {
     if (JSON.stringify(res) == JSON.stringify(correct)) {
+      audioBg?.pause();
       audioWin?.play();
       setShowModal(true);
     }
