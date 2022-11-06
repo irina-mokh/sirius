@@ -6,7 +6,7 @@ import { DndProvider } from 'react-dnd';
 export default function App({ Component, pageProps }: AppProps) {
   return (
   <DndProvider backend={HTML5Backend}>
-    <Component {...pageProps} />;
+    <Component {...pageProps} />
   </DndProvider>
   )
 }

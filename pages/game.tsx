@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { amounts, intervals } from '../styles/variables';
-import { Item, ItemProps, ItemStyled } from '../components/Item';
+import { Item, ItemProps } from '../components/Item';
 import { getRandom, getRandomSymbol } from '../utils';
-import { colors } from '../styles/variables';
 import { GetServerSidePropsContext } from 'next';
 import { Slot } from '../components/Slot';
+import { SlotBar } from '../components/SlotBar';
 import { Win } from '../components/Win';
+import { Sort } from '../components/Sort';
 
 const GameStyled = styled.main`
   display: flex;
@@ -16,76 +17,17 @@ const GameStyled = styled.main`
   background-image: url(${({theme})=> `/images/bg/${theme}.png`});
   background-size: cover;
 `
-const SlotBar = styled.ul`
-  position: relative;
-  margin: 0 45px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 45px 50px;
-  border-radius: 50px;
-  overflow: hidden;
-  background: ${({theme}) => theme == 1 ? 'radial-gradient(238.96% 238.96% at 50% 54.28%, #FAF9F9 0%, #C09F9B 100%)' : 'transparent'};
-  box-shadow: ${({theme}) => theme == 1 ?'0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none'};
-  @media (max-width: 980px) {
-    padding: 15px 20px;
-    border-radius: 30px;
-    margin: 0 20px;
-  }
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url(${({theme})=> `/images/bar-${theme}.svg`});
-    background-size: cover;
-    opacity: ${({theme}) => theme == 1 ? '0.1' : '1'};
-  }
-  
-`
 const Items = styled.ul`
   display: flex;
   margin: 0 auto;
   align-items: center;
   flex-grow: 1;  
 `
-const Sort = styled.div<SortProps>`
-  height: 69px;
-  width: 357px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin: 0 0 10px ${({sort}) => sort == 'descending' ? 'auto' : '0'};
-  justify-content: ${({sort}) => sort == 'descending' ? 'end' : 'start'};
-  &::before {
-    content: '';
-    position: absolute;
-    background: url('/images/sort-arrow.svg') no-repeat;
-    transform: ${({sort}) => sort == 'ascending' ? 'none' : 'rotate(180deg)'};
-    background-position: 100% 0;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-
-  }
-  font-family: 'Calibri';
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 36px;
-  color: ${colors.white.default};
-	-webkit-text-stroke: 2px ${colors.blue.active};
-`
 type GameProps = {
   theme: number;
   values: Array<number | string>;
   sort: string;
   correct: Array<number | string>;
-}
-type SortProps = {
-  sort: string;
 }
 
 function getSize() {
@@ -195,9 +137,7 @@ export default function Game(props: GameProps) {
       <Items>
         {items}
       </Items>
-      <Sort sort={sort}>
-        {sort === 'ascending' ? 'По возрастанию' : 'По убыванию'}
-      </Sort>
+      <Sort sort={sort}></Sort>
       <SlotBar theme={props.theme}>
         {slots}
       </SlotBar>

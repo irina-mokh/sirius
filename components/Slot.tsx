@@ -48,6 +48,6 @@ export const Slot = (props: SlotProps) => {
     [props]
   );
 	return (
-		<SlotStyled {...props} ref={drop} isOver={isOver} ></SlotStyled>
+		<SlotStyled {...props} ref={drop} isOver={isOver}></SlotStyled>
 	)
 }

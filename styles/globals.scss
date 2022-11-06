@@ -3,12 +3,19 @@ body {
   padding: 0;
   margin: 0;
   font-family: Helvetica;
+  overflow: hidden;
 }
 
 @font-face {
   font-family: 'Circle Rounded Alt';
   src: url('../assets/fonts/CirceRoundedAlt-Regular2.woff');
 }
+
+@font-face {
+  font-family: 'Circle Rounded';
+  src: url('../assets/fonts/CirceRounded-Regular.woff');
+}
+
 a {
   color: inherit;
   text-decoration: none;

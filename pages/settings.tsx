@@ -4,7 +4,7 @@ import { amounts, colors, intervals } from '../styles/variables';
 import { RangeInput } from '../components/RangeInput';
 import { Button } from '../components/Button';
 import bgSrc from '../assets/images/bg-settings.png';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 
 type Inputs = {
@@ -26,11 +26,11 @@ const Wrapper = styled.div`
 
 const Menu = styled.div`
   padding: 20px;
+  height: 90%;
   width: 699px;
   @media (max-width: 980px) {
     min-width: 400px;
   }
-  height: 90%;
   background: linear-gradient( #7F75F0, #101F32);
   border-radius: 40px;
 `
@@ -51,10 +51,10 @@ const Form = styled.form`
 `;
 
 const Label = styled.label`
+  margin: 0 0 16px 0;
   color: ${colors.black.default};
   font-weight: 600;
   font-size: 32px;
-  margin: 0 0 16px 0;
   @media (max-width: 980px) {
     font-size: 26px;
   }
@@ -88,6 +88,7 @@ const SortBtn = styled.div`
   input {
     display: none;
   }
+  
   input:checked + label{
     opacity: 1;
   }

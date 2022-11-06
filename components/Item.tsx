@@ -17,11 +17,11 @@ type ItemStyledProps = {
 	i: number;
 	n: number;
 }
+
 export const ItemStyled = styled.div<ItemStyledProps>`
 	opacity: ${({transparency}) => transparency};
 	width: ${props => props.size + 25}px;
 	aspect-ratio: 1 / 1;
-	/* height: ${props => props.size + 25}px; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -33,6 +33,24 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 	transform: translate(0, 0);
 	cursor: grab;
 	z-index: 2;
+
+	// stems for flowers in 4 theme
+	&::after {
+		content: '';
+		width: 130px;
+		height: 460px;
+		background-image: ${({theme, i}) =>theme == 4 ? `url(/images/stem${i}.svg)` : ''};
+		background-repeat: no-repeat;
+		position: absolute;
+		bottom: ${({i}) => i == 3 ? '-420px' : '-430px'};
+		right: ${({i}) => i == 1 ? '-90px' : '-40px'};
+		top: ${({i}) => i == 4 ? '120px' : ''};
+		left: ${({i}) => i == 4 ? '20px' : ''};
+		.slot-bar & {
+			display: none;
+		}
+	}
+
 	.text {
 		font-family: Calibri;
 		font-weight: 800;
