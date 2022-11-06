@@ -8,20 +8,19 @@ export type ItemProps = {
 	value: string;
 	i: number;
 	n: number;
-	size: number;
 	show: boolean;
 }
 
 type ItemStyledProps = {
 	transparency: string;
-	size: number;
 	i: number;
 	n: number;
 }
 
 export const ItemStyled = styled.div<ItemStyledProps>`
+	--size: calc(100vw / 7);
 	opacity: ${({transparency}) => transparency};
-	width: ${props => props.size + 25}px;
+	width: calc(var(--size) + 25px);
 	aspect-ratio: 1 / 1;
 	display: flex;
 	justify-content: center;
@@ -38,15 +37,39 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 	// stems for flowers in 4 theme
 	&::after {
 		content: '';
-		width: 130px;
-		height: 460px;
+		/* width: 130px;
+		height: 460px; */
+		width: var(--size);
+		height: calc(var(--size) * 4);
 		background-image: ${({theme, i}) =>theme == 4 ? `url(/images/stem${i}.svg)` : ''};
 		background-repeat: no-repeat;
 		position: absolute;
-		bottom: ${({i}) => i == 3 ? '-420px' : '-430px'};
-		right: ${({i}) => i == 1 ? '-90px' : '-40px'};
-		top: ${({i}) => i == 4 ? '120px' : ''};
-		left: ${({i}) => i == 4 ? '20px' : ''};
+		/* left: 50%; */
+		/* bottom: ${({i}) => i == 3 ? '-170%' : '-180%'}; */
+		top: ${({i}) => {
+			switch (i) {
+				case 1:
+					return '85%';
+				case 2:
+					return '85%';
+				case 3:
+					return '80%';
+				case 4:
+					return '83%';
+			}
+		}};
+		left: ${({i}) => {
+			switch (i) {
+				case 1:
+					return '80%';
+				case 2:
+					return '45%';
+				case 3:
+					return '40%';
+				case 4:
+					return '10%';
+			}
+		}};
 		.slot-bar & {
 			display: none;
 		}
@@ -80,7 +103,7 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 	}
 `
 export const Item = (props: ItemProps) => {
-	const { i, show, value} = props;
+	const { show, value} = props;
 
 	const  [audioGrab, setAudioGrab ] = useState<HTMLAudioElement | null>(null);
 	useEffect(() => {

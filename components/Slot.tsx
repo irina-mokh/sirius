@@ -5,21 +5,20 @@ import { ItemProps } from '../components/Item';
 import React from 'react';
 type SlotProps = {
   n: number;
-  size: number;
 	children: React.ReactNode;
 	dropHandle: (item: ItemProps) => void;
 }
 
 type SlotStyledProps = {
 	n: number;
-  size: number;
 	isOver: boolean;
 }
 
 const SlotStyled = styled.li<SlotStyledProps>`
+  --size: calc(100vw / 7 - 25px);
   list-style: none;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
+  width: var(--size);
+  height: var(--size);
   margin: 0 4px 0 0;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.06);

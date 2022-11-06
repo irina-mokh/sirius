@@ -30,14 +30,6 @@ type GameProps = {
   correct: Array<number | string>;
 }
 
-function getSize() {
-  if (window) {
-    return Math.min(131, window.innerWidth / 7);
-  } else {
-    return 131;
-  }
-}
-
 export default function Game(props: GameProps) {
   // prepare sounds 
   const  [audioErr, setAudioErr ] = useState<HTMLAudioElement | null>(null);
@@ -61,15 +53,6 @@ export default function Game(props: GameProps) {
     audioBg?.play();
     return () => { audioBg?.pause()}
   },[audioBg]);
-  // change items size on screen resize
-  const [size, setSize ] = useState(115);
-  useEffect(() => {
-    
-    window.addEventListener('resize', () => setSize(getSize()));
-    return () => window.removeEventListener('resize', () => setSize(getSize()));
-
-
-  },[]);
 
   const {values, theme, sort, correct} = props;
   const amount = values.length;
@@ -92,7 +75,7 @@ export default function Game(props: GameProps) {
 
   useEffect(() => {
     const elements = values.map((value, i) => (
-      <Item key={i} theme={theme} value={String(value)} n={amount} i={i+1} size={size} show={itemsShow[i]}></Item>))
+      <Item key={i} theme={theme} value={String(value)} n={amount} i={i+1} show={itemsShow[i]}></Item>))
     setItems(elements)
   }, [itemsShow]);
 
@@ -114,7 +97,7 @@ export default function Game(props: GameProps) {
     // state to get i for BG image from unsorted values
     const [ dropI, setDropI] = useState(6);
     slots.push(
-      <Slot key={i} n={amount + 1} size={size} dropHandle={(item : ItemProps) => {
+      <Slot key={i} n={amount + 1} dropHandle={(item : ItemProps) => {
         if (correct[i] == item.value) {
           // update i for the same bg-image
           setDropI(item.i);
@@ -139,7 +122,6 @@ export default function Game(props: GameProps) {
           theme={theme}
           n={amount}
           i={dropI}
-          size={size}
           value={String(res[i])}
           show={true}
         ></Item>
