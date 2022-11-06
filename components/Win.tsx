@@ -19,6 +19,7 @@ const Overlay = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	overflow: hidden;
 `
 
 const Popup = styled.div`
@@ -47,6 +48,7 @@ const Popup = styled.div`
 		width: 216px;
 		height: 223px;
 		background: url(${star.src}) 0 0 no-repeat;
+		background-clip: padding-box;
 	}
 	&::before {
 		top: -43px;
@@ -79,6 +81,7 @@ const Popup = styled.div`
 			width: 216px;
 			height: 223px;
 			background: url(${star.src}) 100% 100% no-repeat;
+			background-clip: padding-box;
 		}
 		&::before {
 				top: 65px;
