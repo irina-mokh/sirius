@@ -20,7 +20,7 @@ type ItemStyledProps = {
 export const ItemStyled = styled.div<ItemStyledProps>`
 	--size: calc(100vw / 7);
 	opacity: ${({transparency}) => transparency};
-	width: calc(var(--size) + 25px);
+	width: min(calc(var(--size) + 25px), 157px);
 	aspect-ratio: 1 / 1;
 	display: flex;
 	justify-content: center;

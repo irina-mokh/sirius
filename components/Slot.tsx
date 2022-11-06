@@ -15,7 +15,7 @@ type SlotStyledProps = {
 }
 
 const SlotStyled = styled.li<SlotStyledProps>`
-  --size: calc(100vw / 7 - 25px);
+  --size: min(calc(100vw / 7), 131px);
   list-style: none;
   width: var(--size);
   height: var(--size);
