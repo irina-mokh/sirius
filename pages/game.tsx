@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { amounts, intervals } from '../styles/variables';
 import { Item, ItemProps } from '../components/Item';
-import { getRandom, getRandomSymbol } from '../utils';
+import { getValue } from '../utils';
 import { GetServerSidePropsContext } from 'next';
 import { Slot } from '../components/Slot';
 import { SlotBar } from '../components/SlotBar';
@@ -49,6 +49,11 @@ export default function Game(props: GameProps) {
     setAudioWin(new Audio('./audio/success.mp3'));
     setAudioBg(new Audio('./audio/music.mp3'));
   }, []);
+
+  audioBg?.addEventListener('ended', function () {
+    this.currentTime = 0;
+    this.play();
+  }, false);
 
   useEffect(() => {
     audioBg?.play();
@@ -155,43 +160,34 @@ export default function Game(props: GameProps) {
   )
 };
 
-export const getServerSideProps = (context : GetServerSidePropsContext) => {
+export const getServerSideProps = async (context : GetServerSidePropsContext) => {
+
   // get random theme
   const themes = 4;
   const theme = Math.floor(Math.random() * themes) + 1;
-
   // get form values
   const amountIndex = Number(context.query.amountIndex);
   const intervalsIndex = Number(context.query.intervalsIndex);
   const sort = context.query.sort;
 
   // getting data according to settings
-  let min: string, max : string;
+  let min: string = '0';
+  let max : string = '1';
   const amount = Number(amounts[amountIndex].value);
   const interval = intervals[intervalsIndex].value;
 
   let values: Array<string | number> = [];
 
-  function getValue () {
-    let res = (intervalsIndex == 0) ? getRandomSymbol() : String(getRandom(+min, +max));
-    return res;
-  };
-
   //  get min max for numbers
-  if (intervalsIndex != 0) {
+  if (intervalsIndex !== 0) {
     [min, max] = interval.slice(1, interval.length - 1).split(',');
   } 
 
   for (let i = 1; i <= amount + 1; i++) {
-    let value;
-    while (!value) {
-      let v = getValue();
-      if (values.includes(v)) {
-        v = getValue();
-      } else {
-        value = v;
-      }
-    }
+    let value = getValue(intervalsIndex, min, max);
+    while (values.includes(value)) {
+      value = getValue(intervalsIndex, min, max);
+    };
     values.push(value);
   }
 

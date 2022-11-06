@@ -5,11 +5,11 @@ import { RangeInput } from '../components/RangeInput';
 import { Button } from '../components/Button';
 import bgSrc from '../assets/images/bg-settings.png';
 import React from 'react';
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 
 type Inputs = {
-  amount: number;
-  interval: string;
+  amountIndex: number;
+  intervalIndex: number;
   sort: string;
 }
 
@@ -95,21 +95,21 @@ const SortBtn = styled.div`
   
 `;
 
-export default function Settings() {
-  let data;
-  const onSubmit: SubmitHandler<Inputs> = (e) => {
-    console.log(e);
-    data = e;
-  }
+const INITIAL_SET = {
+  sort: 'ascending',
+  intervalsIndex: 0,
+  amountIndex: 0,
+};
 
-  const methods = useForm<Inputs>()
-  const { register, handleSubmit, watch } = methods;
+export default function Settings() {
+  const methods = useForm<Inputs>({defaultValues:{...INITIAL_SET}})
+  const { register, watch } = methods;
 
   return (
     <Wrapper>
       <Menu>
         <FormProvider {...methods}>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form>
             <div>
               <Label>Кол-во предметов</Label>
               <RangeInput data={amounts} name="amountIndex" />

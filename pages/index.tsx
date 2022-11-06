@@ -12,6 +12,9 @@ const Main = styled.main`
   align-items: center;
   justify-content: center;
   background-image: url(${bgSrc.src});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   .title {
     margin: 0 0 10px 0;
     font-size: 40px;
