@@ -40,23 +40,24 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 		content: '';
 		/* width: 130px;
 		height: 460px; */
-		width: var(--size);
+		width: min(calc(var(--size) * 1.2), 130px);
 		height: calc(var(--size) * 4);
 		background-image: ${({theme, i}) =>theme == 4 ? `url(/images/stem${i}.svg)` : ''};
 		background-repeat: no-repeat;
 		position: absolute;
-		/* left: 50%; */
-		/* bottom: ${({i}) => i == 3 ? '-170%' : '-180%'}; */
+		background-size: 100% auto;
 		top: ${({i}) => {
 			switch (i) {
 				case 1:
 					return '85%';
 				case 2:
-					return '85%';
-				case 3:
 					return '80%';
+				case 3:
+					return '60%';
 				case 4:
 					return '83%';
+				case 5:
+					return '85%';
 			}
 		}};
 		left: ${({i}) => {
@@ -64,11 +65,13 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 				case 1:
 					return '80%';
 				case 2:
-					return '45%';
+					return '20%';
 				case 3:
-					return '40%';
+					return '7%';
 				case 4:
-					return '10%';
+					return '-3%';
+				case 5:
+					return '-50%';
 			}
 		}};
 		.slot-bar & {
