@@ -56,11 +56,19 @@ const Popup = styled.div`
 		top: -43px;
 		left: -30px;
 		background-size: 65%;
+		@media (max-width: 500px) {
+				background-size: 55%;
+				left: -15%;
+			}
 	}
 	&::after {
 		bottom: -35px;
 		left: -105px;
 		background-size: 100%;
+		@media (max-width: 500px) {
+				background-size: 70%;
+				left: -20%;
+			}
 	}
 
 	.content {
@@ -86,15 +94,23 @@ const Popup = styled.div`
 			background-clip: padding-box;
 		}
 		&::before {
-				top: 65px;
-				right: -105px;
-				background-size: 100%;
+			top: 65px;
+			right: -105px;
+			background-size: 100%;
+			@media (max-width: 500px) {
+				background-size: 70%;
+				right: -20%;
 			}
-			&::after {
-				bottom: -45px;
-				right: -50px;
-				background-size: 53%;
+		}
+		&::after {
+			bottom: -45px;
+			right: -50px;
+			background-size: 53%;
+			@media (max-width: 500px) {
+				background-size: 35%;
+				right: -5%;
 			}
+		}
 	}
 
 	button {
@@ -119,6 +135,10 @@ const Popup = styled.div`
 		@media (max-width: 800px) {
 			font-size: 60px;
 		}
+		@media (max-width: 500px) {
+			font-size: 50px;
+			margin-top: 50px;
+		}
 	}
 
 	.text {
@@ -131,6 +151,9 @@ const Popup = styled.div`
 		margin-top: 22px;
 		@media (max-width: 800px) {
 			font-size: 32px;
+		}
+		@media (max-width: 500px) {
+			font-size: 28px;
 		}
 	}
 `
