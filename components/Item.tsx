@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { colors } from '../styles/variables';
 import { useDrag } from 'react-dnd';
 import { useEffect, useState } from 'react';
-
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import { DragLayer } from './DragLayer';
 export type ItemProps = {
 	theme: number;
 	value: string;
@@ -11,7 +12,7 @@ export type ItemProps = {
 	show: boolean;
 }
 
-type ItemStyledProps = {
+export type ItemStyledProps = {
 	transparency: string;
 	i: number;
 	n: number;
@@ -83,6 +84,11 @@ export const ItemStyled = styled.div<ItemStyledProps>`
 		letter-spacing: 2px;
 		color: ${colors.white.default};
 		-webkit-text-stroke: 4px ${colors.blue.active};
+		@media (max-width: 800px) {
+			font-size: 40px;
+			-webkit-text-stroke: 2px ${colors.blue.active};
+			line-height: 54px;
+		}
 	}
 
 	&:nth-of-type(1) {
@@ -110,7 +116,7 @@ export const Item = (props: ItemProps) => {
 		setAudioGrab(new Audio('./audio/grab.mp3'));
 	}, []);
 	
-	const [{ isDragging }, dragRef] = useDrag(
+	const [{ isDragging }, dragRef, preview] = useDrag(
     () => ({
       type: 'item',
       item: props,
@@ -123,9 +129,16 @@ export const Item = (props: ItemProps) => {
 
 	const transparency = (isDragging || !show) ? '0' : '1';
 
+	useEffect(() => {
+		preview(getEmptyImage())
+}, []);
+
 	return (
-		<ItemStyled {...props} ref={dragRef} transparency={transparency} onMouseDown={() =>{audioGrab?.play()}} onTouchStart={() =>{audioGrab?.play()}}>
-			<span className="text">{value}</span>
-		</ItemStyled>
+		<>
+			<ItemStyled {...props} ref={dragRef} transparency={transparency} onMouseDown={() =>{audioGrab?.play()}} onTouchStart={() =>{audioGrab?.play()}}>
+				<span className="text">{value}</span>
+			</ItemStyled>
+			<DragLayer {...props} transparency={'1'}/>
+		</>
 	);
 }

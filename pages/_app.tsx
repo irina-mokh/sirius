@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {!isMobile && <DndProvider backend={HTML5Backend}>
         <Component {...pageProps} />
       </DndProvider>}
-      {isMobile && <DndProvider backend={TouchBackend}>
+      {isMobile && <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
         <Component {...pageProps} />
       </DndProvider>}
     </>

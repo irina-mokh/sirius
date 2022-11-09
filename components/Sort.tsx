@@ -13,6 +13,9 @@ display: flex;
 align-items: center;
 margin: 0 0 10px ${({sort}) => sort == 'descending' ? 'auto' : '0'};
 justify-content: ${({sort}) => sort == 'descending' ? 'end' : 'start'};
+@media (max-width: 600px) {
+	width:100%;
+}
 &::before {
 	content: '';
 	position: absolute;
