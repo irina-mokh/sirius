@@ -138,7 +138,7 @@ export const Item = (props: ItemProps) => {
 			<ItemStyled {...props} ref={dragRef} transparency={transparency} onMouseDown={() =>{audioGrab?.play()}} onTouchStart={() =>{audioGrab?.play()}}>
 				<span className="text">{value}</span>
 			</ItemStyled>
-			<DragLayer {...props} transparency={'1'}/>
+			<DragLayer {...props} transparency={'1'} isDragging={isDragging}/>
 		</>
 	);
 }

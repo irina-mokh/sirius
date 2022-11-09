@@ -1,7 +1,11 @@
 import { DragLayerMonitor, useDragLayer } from 'react-dnd'
 import { ItemStyled, ItemStyledProps } from './Item';
 
-export const DragLayer = (props: ItemStyledProps) => {  
+interface DragLayerProps extends ItemStyledProps {
+	isDragging: boolean;
+}
+
+export const DragLayer = (props: DragLayerProps) => {  
     
     const {isDragging, currentOffset, item} = useDragLayer(
       (monitor: DragLayerMonitor) => {
@@ -12,7 +16,7 @@ export const DragLayer = (props: ItemStyledProps) => {
         };
       }
     );
-		return isDragging && currentOffset
+		return  isDragging && props.isDragging && currentOffset
     	? <div style={{ 
     	    // functional
     	    transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
@@ -20,6 +24,7 @@ export const DragLayer = (props: ItemStyledProps) => {
     	    top: 0,
     	    left: 0,
     	    pointerEvents: 'none', 
+					zIndex: 5,
     	  }}>
     	      <ItemStyled {...props}>
 							<span className="text">{item.value}</span>
