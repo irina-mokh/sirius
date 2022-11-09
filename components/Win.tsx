@@ -119,6 +119,7 @@ const Popup = styled.div`
 		@media (max-width: 800px) {
 			font-size: 24px;
 		}
+		z-index: 5;
 	}
 
 	.title {

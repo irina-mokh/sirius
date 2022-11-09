@@ -15,6 +15,7 @@ const Main = styled.main`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  text-align: center;
   .title {
     margin: 0 0 10px 0;
     font-size: 40px;
